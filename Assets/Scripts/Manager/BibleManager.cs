@@ -3,7 +3,7 @@ using UnityEngine;
 using Whisper;
 using Whisper.Utils;
 
-public class BibleManager : MonoBehaviour
+public partial class BibleManager : MonoBehaviour
 {
     public static BibleManager Instance { get; private set; }
 

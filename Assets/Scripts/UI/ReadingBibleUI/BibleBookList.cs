@@ -1,7 +1,4 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public enum BibleType
@@ -13,109 +10,75 @@ public enum BibleType
 public class BibleBookList : UIBase
 {
     [SerializeField] private BibleType type;
+
     [UIInject("Contents")] private UIList _list;
 
-    private List<BibleItem> BibleItemList = new();
+    private readonly List<BibleItem> _bibleItemList = new();
+
+    private string[] BookList => type == BibleType.Old
+            ? BibleBookSetting.OldTestament
+            : BibleBookSetting.NewTestament;
+
 
     public void CreateList()
     {
-        _list.Clear();
-        BibleItemList.Clear();
+        OnClear();
 
-        switch (type)
+        for (int i = 0, count = BookList.Length; i < count; ++i)
         {
-            case BibleType.Old:
-                {
-                    for (int i = 0, count = BibleBookSetting.OldTestament.Length; i < count; ++i)
-                    {
-                        var item = _list.AddItem<BibleItem>();
-                        item.SetData(i, BibleBookSetting.OldTestament[i]);
+            var item = _list.AddItem<BibleItem>();
 
-                        BibleItemList.Add(item);
-                    }
-                }
-                break;
-            case BibleType.New:
-                {
-                    for (int i = 0, count = BibleBookSetting.NewTestament.Length; i < count; ++i)
-                    {
-                        var item = _list.AddItem<BibleItem>();
-                        item.SetData(i, BibleBookSetting.NewTestament[i]);
+            item.SetData(type, i, BookList[i]);
 
-                        BibleItemList.Add(item);
-                    }
-                }
-                break;
+            _bibleItemList.Add(item);
         }
     }
 
     public void OnClear()
     {
         _list.Clear();
-        BibleItemList.Clear();
+        _bibleItemList.Clear();
     }
 
     public void ShowDefaultList()
     {
-        switch (type)
-        {
-            case BibleType.Old:
-                {
-                    for (int i = 0, count = BibleBookSetting.OldTestament.Length; i < count; ++i)
-                    {
-                        _list.SetActive(i, true);
-                    }
-                }
-                break;
-            case BibleType.New:
-                {
-                }
-                break;
-        }
+        SetAllActive(true);
     }
 
-    public void Search(string InText)
+    public void Search(string inText)
     {
-        if (BibleItemList == null)
-            return;
+        var item = _bibleItemList.Find(x => x.Name == inText);
 
-        var data = BibleItemList.Find(x => x.Name == InText);
-        if (data is null)
+        if (item == null)
+        {
+            ShowDefaultList();
             return;
+        }
 
-        Search(data.BookIndex);
+        Search(item.BookIndex);
     }
 
     public void Search(int index)
     {
-        if (BibleItemList == null)
-            return;
+        var exists = _bibleItemList.Exists(x => x.BookIndex == index);
 
-        switch (type)
+        if (!exists)
         {
-            case BibleType.Old:
-                {
-                    var has = BibleItemList.Exists(x => x.BookIndex == index);
-                    if (has is false)
-                    {
-                        for (int i = 0, count = BibleBookSetting.OldTestament.Length; i < count; ++i)
-                        {
-                            _list.SetActive(i, true);
-                        }
-                        return;
-                    }
+            ShowDefaultList();
+            return;
+        }
 
-                    for (int i = 0, count = BibleBookSetting.OldTestament.Length; i < count; ++i)
-                    {
-                        var bookIndex = i + 1;
-                        _list.SetActive(i, bookIndex == index);
-                    }
-                }
-                break;
-            case BibleType.New:
-                {
-                }
-                break;
+        for (int i = 0; i < _bibleItemList.Count; ++i)
+        {
+            _list.SetActive(i, _bibleItemList[i].BookIndex == index);
+        }
+    }
+
+    private void SetAllActive(bool isActive)
+    {
+        for (int i = 0; i < _bibleItemList.Count; ++i)
+        {
+            _list.SetActive(i, isActive);
         }
     }
 }

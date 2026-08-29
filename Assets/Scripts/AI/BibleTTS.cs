@@ -117,14 +117,23 @@ public class BibleTTS
 
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 
-        if (_ttsProcess != null &&
-            !_ttsProcess.HasExited)
-        {
-            _ttsProcess.Kill();
-        }
+        if (_ttsProcess == null)
+            return;
 
-        _ttsProcess?.Dispose();
-        _ttsProcess = null;
+        try
+        {
+            if (!_ttsProcess.HasExited)
+                _ttsProcess.Kill();
+        }
+        catch (InvalidOperationException)
+        {
+            // 이미 종료됐거나 Process와 연결되지 않은 상태
+        }
+        finally
+        {
+            _ttsProcess.Dispose();
+            _ttsProcess = null;
+        }
 
 #endif
     }

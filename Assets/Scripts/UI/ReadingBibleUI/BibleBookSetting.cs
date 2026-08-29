@@ -96,4 +96,14 @@ public static class BibleBookSetting
 
         return -1;
     }
+
+    public static int GetOldBookNumber(string InName)
+    {
+        return System.Array.FindIndex(_oldTestament, x => x == InName);
+    }
+
+    public static int GetNewBookNumber(string InName)
+    {
+        return System.Array.FindIndex(_newTestament, x => x == InName);
+    }
 }

@@ -8,11 +8,14 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: ad09c81ffb1930948ae6d89fd9200c4e
   - enabled: 1
     path: Assets/Scenes/ReadingBible.unity
     guid: 7bdbeb5438828bd45b2d619a9290e587
+  - enabled: 1
+    path: Assets/Scenes/ChooseReading.unity
+    guid: 5455b275c11e67f48a291fdb4012340d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

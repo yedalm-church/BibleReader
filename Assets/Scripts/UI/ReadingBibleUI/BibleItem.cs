@@ -8,6 +8,7 @@ public class BibleItem : UIBase
     [UIInject("Text_Name")] private TMP_Text Text_Name;
     [UIInject("Button_Item")] private UIButton Button_Item;
 
+    private BibleType _type;
     private int _bookIndex;
     private string _name;
 
@@ -34,8 +35,9 @@ public class BibleItem : UIBase
         UIBindEvent.UnBindEvent(Button_Item, OnClickButtonItem);
     }
 
-    public void SetData(int InIndex, string InName)
+    public void SetData(BibleType InType, int InIndex, string InName)
     {
+        _type = InType;
         _bookIndex = InIndex + 1;
         _name = InName;
 
@@ -45,6 +47,9 @@ public class BibleItem : UIBase
 
     private void OnClickButtonItem()
     {
-        BibleManager.Instance.StartReading(_bookIndex, 1, 1);
+        //BibleManager.Instance.StartReading(_bookIndex, 1, 1);
+        BibleManager.Instance.SetReadingData(_type, _bookIndex, 1, 1);
+
+        SceneLoadManager.LoadSceneAsync("ChooseReading").LogExceptionsAndForget();
     }
 }
