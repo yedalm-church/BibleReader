@@ -14,16 +14,16 @@ public class BibleReader
         _chapter = InChapter;
         _verse = InVerse;
 
-        _lastVerse = BibleManager.Instance.GetVerseCount(_book, _chapter);
+        _lastVerse = TableDataManager.BibleDataLoader.GetVerseCount(_book, _chapter);
 
         BibleManager.Instance.TTS.OnSpeakCompleted += OnSpeakCompleted;
 
         ReadCurrentVerse();
     }
 
-    private void ReadCurrentVerse()
+    public void ReadCurrentVerse()
     {
-        var text = BibleManager.Instance.GetVerse(_book,
+        var text = TableDataManager.BibleDataLoader.GetVerse(_book,
             _chapter,
             _verse)?.text;
 

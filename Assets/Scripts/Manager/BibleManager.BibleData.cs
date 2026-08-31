@@ -18,7 +18,7 @@ public class BibleReadingData
     public int Verse;
 }
 
-public partial class BibleManager : MonoBehaviour
+public partial class BibleManager
 {
     public BibleReadingData ReadingData { get; private set; }
 

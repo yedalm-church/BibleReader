@@ -14,7 +14,7 @@ public class BibleReadList : UIBase
         //var datas = BibleManager.Instance.GetChapter(BibleManager.Instance.ReadingData.Book,
         //    BibleManager.Instance.ReadingData.Chapter);
 
-        var datas = BibleManager.Instance.GetChapter(1, 1);
+        var datas = TableDataManager.BibleDataLoader.GetChapter(1, 1);
 
         for (int i = 0, count = datas.Count; i < count; ++i)
         {

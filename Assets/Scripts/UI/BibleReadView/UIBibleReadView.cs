@@ -7,6 +7,7 @@ public class UIBibleReadView : UIBase
     [UIInject("Button_Chapter")] private UIButton Button_Chapter;
     [UIInject("Text_Read_Type")] private TMP_Text Text_Read_Type;
     [UIInject("Button_Read_Type")] private UIButton Button_Read_Type;
+    [UIInject("Button_Read_Start")] private UIButton Button_Read_Start;
 
     public override void UpdateContent()
     {
@@ -37,12 +38,14 @@ public class UIBibleReadView : UIBase
     {
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
+        UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
     }
 
     public override void UnBindEvent()
     {
         UIBindEvent.BindEvent(Button_Chapter, OnClickChapter);
         UIBindEvent.UnBindEvent(Button_Read_Type, OnClickReadType);
+        UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
     }
 
     private void OnClickChapter()
@@ -53,5 +56,13 @@ public class UIBibleReadView : UIBase
     private void OnClickReadType()
     {
 
+    }
+
+    private void OnClickReadStart()
+    {
+        BibleManager.Instance.StartReading
+            (BibleManager.Instance.ReadingData.Book,
+             BibleManager.Instance.ReadingData.Chapter,
+             BibleManager.Instance.ReadingData.Verse);
     }
 }

@@ -7,17 +7,8 @@ public partial class BibleManager : MonoBehaviour
 {
     public static BibleManager Instance { get; private set; }
 
-    private BibleDataLoader _bibleLoader;
-    private BibleTTS _bibleTTS;
-    private BibleSTT _bibleSTT;
-    private BibleReader _bibleReader;
-    private BibleAlternateReader _alternateReader;
     private WhisperManager _whisperManager;
     private MicrophoneRecord _microphoneRecord;
-
-    public BibleTTS TTS => _bibleTTS;
-
-    public IReadOnlyList<BibleVerse> Verses => _bibleLoader?.Verses;
 
     private void Awake()
     {
@@ -35,13 +26,7 @@ public partial class BibleManager : MonoBehaviour
 
     private void Initialize()
     {
-        _bibleLoader = new BibleDataLoader();
-
-        if (!_bibleLoader.Load())
-        {
-            Debug.LogError("성경 데이터 로드 실패");
-            return;
-        }
+        TableDataManager.Initialize();
 
         Debug.Log("BibleManager 초기화 완료");
 
@@ -54,43 +39,13 @@ public partial class BibleManager : MonoBehaviour
         _bibleSTT = new(_whisperManager, _microphoneRecord);
         _bibleSTT.Initialize();
 
-        _alternateReader = new(_bibleLoader,
+        _alternateReader = new(TableDataManager.BibleDataLoader,
                                _bibleTTS,
                                _bibleSTT);
 
         _bibleReader = new();
 
         BibleReadingSetting.Load();
-    }
-
-    public List<BibleVerse> GetChapter(int InBook, int InChapter)
-    {
-        return _bibleLoader.GetChapter(InBook, InChapter);
-    }
-
-    public BibleVerse GetVerse(int InBook, int InChapter, int InVerse)
-    {
-        return _bibleLoader.GetVerse(InBook, InChapter, InVerse);
-    }
-
-    public int GetVerseCount(int InBook, int InChapter)
-    {
-        return GetChapter(InBook, InChapter)?.Count ?? -1;
-    }
-
-    public void ReadVerse(int InBook, int InChapter, int InVerse)
-    {
-        var bibleVerse = _bibleLoader.GetVerse(InBook, InChapter, InVerse);
-
-        if (bibleVerse == null)
-            return;
-
-        _bibleTTS.Speak(bibleVerse.text);
-    }
-
-    public void StopReading()
-    {
-        _bibleTTS.Stop();
     }
 
     private void OnDestroy()
@@ -101,20 +56,29 @@ public partial class BibleManager : MonoBehaviour
         _bibleTTS?.Shutdown();
     }
 
-    public void StartReading(int InBook, int InChapter, int InVerse = 1)
-    {
-        _bibleReader.StartReading(InBook, InChapter, InVerse);
-    }
+    private bool _wasAISpeaking;
+    private bool IsAISpeaking;
 
-    public void StartAlternateReading(int InBook,
-                                      int InChapter,
-                                      int InVerse)
+    private void OnApplicationPause(bool pauseStatus)
     {
-        _alternateReader.StartReading(InBook, InChapter, InVerse);
-    }
+        if (pauseStatus)
+        {
+            Debug.Log("앱 멈춤");
 
-    public void UserReadingComplete()
-    {
-        _alternateReader.UserReadingComplete();
+            _wasAISpeaking = IsAISpeaking;
+
+            if (_wasAISpeaking)
+                StopReading();
+        }
+        else
+        {
+            Debug.Log("앱 다시 시작");
+
+            if (_wasAISpeaking)
+            {
+                _wasAISpeaking = false;
+                RestartCurrentVerse();
+            }
+        }
     }
 }
