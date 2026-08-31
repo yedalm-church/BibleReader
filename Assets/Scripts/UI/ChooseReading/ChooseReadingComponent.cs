@@ -49,19 +49,21 @@ public class ChooseReadingComponent : UIBase
 
     private void OnClickAlternateReadingStart()
     {
-
+        SceneLoadManager.LoadScene("BibleReadView");
     }
 
     private void OnClickAlReadingStart()
     {
-        BibleManager.Instance.StartReading
-            (BibleManager.Instance.ReadingData.BookIndex,
-             BibleManager.Instance.ReadingData.Chapter,
-             BibleManager.Instance.ReadingData.Verse);
+        //BibleManager.Instance.StartReading
+        //    (BibleManager.Instance.ReadingData.Book,
+        //     BibleManager.Instance.ReadingData.Chapter,
+        //     BibleManager.Instance.ReadingData.Verse);
+
+        SceneLoadManager.LoadScene("BibleReadView"); 
     }
 
     private void OnClickRecordReadingStart()
-    {
-
+    { 
+        SceneLoadManager.LoadScene("BibleReadView");
     }
 }

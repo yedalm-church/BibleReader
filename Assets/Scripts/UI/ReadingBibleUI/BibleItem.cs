@@ -50,6 +50,6 @@ public class BibleItem : UIBase
         //BibleManager.Instance.StartReading(_bookIndex, 1, 1);
         BibleManager.Instance.SetReadingData(_type, _bookIndex, 1, 1);
 
-        SceneLoadManager.LoadSceneAsync("ChooseReading").LogExceptionsAndForget();
+        SceneLoadManager.LoadScene("ChooseReading");
     }
 }

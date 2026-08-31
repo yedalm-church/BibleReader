@@ -11,7 +11,6 @@ public class UITitleBarComponent : UIBase
 
     protected override void OnDisable()
     {
-        OnClose();
     }
 
     public override void UpdateContent()
@@ -33,6 +32,6 @@ public class UITitleBarComponent : UIBase
     {
         base.OnClose();
         BibleManager.Instance.TTS.Stop();
-        SceneLoadManager.LoadSceneAsync("ReadingBible").LogExceptionsAndForget();
+        SceneLoadManager.LoadScene("ReadingBible");
     }
 }

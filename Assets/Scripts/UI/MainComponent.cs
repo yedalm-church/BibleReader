@@ -5,9 +5,11 @@ public class MainComponent : UIBase
 {
     [UIInject("Button_Reading_Start")] private UIButton Button_Reading_Start;
     [UIInject("Button_History")] private UIButton Button_History;
+    [UIInject("Image_Title")] private TimelineLoop TimelineLoop;
 
     public override void UpdateContent()
     {
+        TimelineLoop.Play();
         OnBindEvent();
     }
 
@@ -31,7 +33,7 @@ public class MainComponent : UIBase
 
     private void OnClickReadingStart()
     {
-        SceneLoadManager.LoadSceneAsync("ReadingBible").LogExceptionsAndForget();
+        SceneLoadManager.LoadScene("ReadingBible");
     }
 
     private void OnClickHistory()

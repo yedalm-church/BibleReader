@@ -11,7 +11,7 @@ public class BibleBookList : UIBase
 {
     [SerializeField] private BibleType type;
 
-    [UIInject("Contents")] private UIList _list;
+    [UIInject("Contents")] private UIList UIList;
 
     private readonly List<BibleItem> _bibleItemList = new();
 
@@ -26,7 +26,7 @@ public class BibleBookList : UIBase
 
         for (int i = 0, count = BookList.Length; i < count; ++i)
         {
-            var item = _list.AddItem<BibleItem>();
+            var item = UIList.AddItem<BibleItem>();
 
             item.SetData(type, i, BookList[i]);
 
@@ -36,7 +36,7 @@ public class BibleBookList : UIBase
 
     public void OnClear()
     {
-        _list.Clear();
+        UIList.Clear();
         _bibleItemList.Clear();
     }
 
@@ -68,9 +68,9 @@ public class BibleBookList : UIBase
             return;
         }
 
-        for (int i = 0; i < _bibleItemList.Count; ++i)
+        for (int i = 0, count = _bibleItemList.Count; i < count; ++i)
         {
-            _list.SetActive(i, _bibleItemList[i].BookIndex == index);
+            UIList.SetActive(i, _bibleItemList[i].BookIndex == index);
         }
     }
 
@@ -78,7 +78,7 @@ public class BibleBookList : UIBase
     {
         for (int i = 0; i < _bibleItemList.Count; ++i)
         {
-            _list.SetActive(i, isActive);
+            UIList.SetActive(i, isActive);
         }
     }
 }

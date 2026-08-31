@@ -13,10 +13,11 @@ public class UIBibleInfo : UIBase
     {
         base.UpdateContent();
 
-        if (BookList.IsValidIndex(BibleManager.Instance.ReadingData.BookIndex))
+        if (BookList.IsValidIndex(BibleManager.Instance.ReadingData.Book))
         {
-            Text_Title.SetText(BookList[BibleManager.Instance.ReadingData.BookIndex]);
-            Text_Book.SetText($"{BibleManager.Instance.ReadingData.BookIndex}¿Â");
+            var index = BibleManager.Instance.ReadingData.Book - 1;
+            Text_Title.SetText(BookList[index]);
+            Text_Book.SetText($"{BibleManager.Instance.ReadingData.Book}¿Â");
         }
     }
 }

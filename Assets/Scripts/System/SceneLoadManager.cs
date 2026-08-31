@@ -3,6 +3,11 @@ using UnityEngine.SceneManagement;
 
 public static class SceneLoadManager
 {
+    public static void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
     public static async Awaitable LoadSceneAsync(string sceneName)
     {
         var operation = SceneManager.LoadSceneAsync(sceneName);
