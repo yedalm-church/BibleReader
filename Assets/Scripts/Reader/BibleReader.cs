@@ -33,14 +33,7 @@ public class BibleReader
             _chapter,
             _verse)?.text;
 
-        Debug.Log($"ReadCurrentVerse {_chapter} {_verse} {text}");
-        if (_verse == 2)
-        {
-            Debug.Log("hjlee");
-        }
         OnReadCurrentVerse?.Invoke(_verse);
-        BibleManager.UpdateReadingData = (_book, _chapter, _verse);
-
         BibleManager.Instance.TTS.Speak(text);
     }
 

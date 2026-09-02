@@ -52,6 +52,11 @@ public partial class BibleManager
         return ReadTypeText.First(x => x.Type == InType).Text;
     }
 
+    public void UpdateVerseReadingData(int InVerse)
+    {
+        UpdateReadingData.Verse = InVerse;
+    }
+
     public void ResetReadingVerseData()
     {
         ReadingData.Verse = 1;

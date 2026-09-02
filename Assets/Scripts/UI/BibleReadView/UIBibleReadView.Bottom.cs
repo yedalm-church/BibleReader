@@ -14,7 +14,7 @@ public partial class UIBibleReadView
         {
             BibleManager.Instance.StartReading
                 (BibleManager.Instance.ReadingData.Book,
-                 BibleManager.Instance.ReadingData.Verse);
+                 BibleManager.Instance.ReadingData.Chapter);
         }
         else
         {

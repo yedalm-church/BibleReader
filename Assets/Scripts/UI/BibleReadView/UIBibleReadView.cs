@@ -53,7 +53,9 @@ public partial class UIBibleReadView : UIBase
         UIBindEvent.BindEvent(Button_Chapter, OnClickChapter);
         UIBindEvent.BindEvent(Button_Prev, OnClickPrev);
         UIBindEvent.BindEvent(Button_Next, OnClickNext);
-        UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
+        UIBindEvent.BindEvent(Button_Read_Stop, OnClickReadStop);
+        UIBindEvent.BindEvent(Button_Back, OnClickBack);
+        UIBindEvent.BindEvent(Button_Option, OnClickOption);
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
         UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
         UIBindEvent.BindEvent(Button_Read_Pause, OnClickReadPause);
@@ -69,8 +71,10 @@ public partial class UIBibleReadView : UIBase
     public override void UnBindEvent()
     {
         UIBindEvent.UnBindEvent(Button_Chapter, OnClickChapter);
-        UIBindEvent.BindEvent(Button_Prev, OnClickPrev);
-        UIBindEvent.BindEvent(Button_Next, OnClickNext);
+        UIBindEvent.UnBindEvent(Button_Prev, OnClickPrev);
+        UIBindEvent.UnBindEvent(Button_Next, OnClickNext);
+        UIBindEvent.UnBindEvent(Button_Back, OnClickBack);
+        UIBindEvent.UnBindEvent(Button_Option, OnClickOption);
         UIBindEvent.UnBindEvent(Button_Read_Type, OnClickReadType);
         UIBindEvent.UnBindEvent(Button_Read_Start, OnClickReadStart);
         UIBindEvent.UnBindEvent(Button_Read_Pause, OnClickReadPause);
@@ -97,8 +101,9 @@ public partial class UIBibleReadView : UIBase
 
     private void OnReadCurrentVerse(int InVerse)
     {
-        var item = BibleReadList.VerseListItem[InVerse - 1];
+        BibleManager.Instance.UpdateVerseReadingData(InVerse);
 
+        var item = BibleReadList.VerseListItem[InVerse - 1];
         ScrollToCenter(item.transform as RectTransform);
     }
 
