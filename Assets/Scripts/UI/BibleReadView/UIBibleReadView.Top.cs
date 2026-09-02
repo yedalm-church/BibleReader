@@ -10,6 +10,9 @@ public partial class UIBibleReadView
     [UIInject("Text_Prev")] private TMP_Text Text_Prev;
     [UIInject("Text_Next")] private TMP_Text Text_Next;
 
+    [UIInject("Button_Back")] private UIButton Button_Back;
+    [UIInject("Button_Option")] private UIButton Button_Option;
+
     private void SetTopUI()
     {
         Text_Chapter.text = $"{BibleManager.Instance.ReadingData.Chapter}¿Â";
@@ -71,6 +74,16 @@ public partial class UIBibleReadView
         BibleManager.Instance.ReadingData.Chapter += 1;
         BibleManager.Instance.ResetUpdateReadingData();
         UpdateContent();
+    }
+
+    private void OnClickBack()
+    {
+
+    }
+
+    private void OnClickOption()
+    {
+
     }
 
     private void OnClickChapterItem(int InChapter)
