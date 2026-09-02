@@ -104,6 +104,7 @@ public class BibleTTS
             OnSpeakCompleted?.Invoke();
         };
 
+        UnityEngine.Debug.Log($"_ttsProcess {text}");
         _ttsProcess.Start();
 
 #endif

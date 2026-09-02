@@ -41,8 +41,7 @@ public static class UIInjector
             }
             else if (typeof(Component).IsAssignableFrom(field.FieldType))
             {
-                value =
-                    child.GetComponent(field.FieldType);
+                value = child.GetComponent(field.FieldType);
             }
 
             if (value == null)
@@ -55,16 +54,17 @@ public static class UIInjector
         }
     }
 
-    private static Transform FindChildRecursive(Transform InParent, string InObjectName)
+    private static Transform FindChildRecursive(Transform inParent, string inObjectName)
     {
-        foreach (Transform child in InParent)
-        {
-            if (child.name == InObjectName)
-                return child;
+        var children = inParent.GetComponentsInChildren<Transform>(true);
 
-            var result = FindChildRecursive(child, InObjectName);
-            if (result != null)
-                return result;
+        foreach (var child in children)
+        {
+            if (child == inParent)
+                continue;
+
+            if (child.name == inObjectName)
+                return child;
         }
 
         return null;

@@ -61,6 +61,11 @@ public class BibleDataLoader
             v.chapter == InChapter);
     }
 
+    public int GetChapterCount(int InBook)
+    {
+        return verses.FindAll(v => v.book == InBook)?.Count ?? 0;
+    }
+
     public BibleVerse GetVerse(int InBook, int InChapter, int InVerse)
     {
         return verses.Find(v =>

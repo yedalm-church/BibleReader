@@ -47,7 +47,6 @@ public class BibleItem : UIBase
 
     private void OnClickButtonItem()
     {
-        //BibleManager.Instance.StartReading(_bookIndex, 1, 1);
         BibleManager.Instance.SetReadingData(_type, _bookIndex, 1, 1);
 
         SceneLoadManager.LoadScene("ChooseReading");

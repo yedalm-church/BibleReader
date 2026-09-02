@@ -22,6 +22,8 @@ public partial class BibleManager
 {
     public BibleReadingData ReadingData { get; private set; }
 
+    public static (int Book, int Chapter, int Verse) UpdateReadingData = (1, 1, 1);
+
     public readonly List<(ReadType Type, string Text)> ReadTypeText = new()
     {
         (ReadType.AlternateReading, "AI와 교대로 읽기"),
@@ -48,5 +50,17 @@ public partial class BibleManager
     public string GetReadTypeText(ReadType InType)
     {
         return ReadTypeText.First(x => x.Type == InType).Text;
+    }
+
+    public void ResetReadingVerseData()
+    {
+        ReadingData.Verse = 1;
+    }
+
+    public void ResetUpdateReadingData()
+    {
+        UpdateReadingData.Book = ReadingData.Book;
+        UpdateReadingData.Chapter = ReadingData.Chapter;
+        UpdateReadingData.Verse = ReadingData.Verse;
     }
 }

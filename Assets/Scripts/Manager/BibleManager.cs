@@ -56,29 +56,28 @@ public partial class BibleManager : MonoBehaviour
         _bibleTTS?.Shutdown();
     }
 
-    private bool _wasAISpeaking;
-    private bool IsAISpeaking;
+    private bool _wasAISpeaking = false;
 
-    private void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-        {
-            Debug.Log("앱 멈춤");
+    //private void OnApplicationPause(bool pauseStatus)
+    //{
+    //    if (pauseStatus)
+    //    {
+    //        Debug.Log("앱 멈춤");
 
-            _wasAISpeaking = IsAISpeaking;
+    //        _wasAISpeaking = true;
 
-            if (_wasAISpeaking)
-                StopReading();
-        }
-        else
-        {
-            Debug.Log("앱 다시 시작");
+    //        if (_wasAISpeaking)
+    //            StopReading();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("앱 다시 시작");
 
-            if (_wasAISpeaking)
-            {
-                _wasAISpeaking = false;
-                RestartCurrentVerse();
-            }
-        }
-    }
+    //        if (_wasAISpeaking)
+    //        {
+    //            _wasAISpeaking = false;
+    //            RestartCurrentVerse();
+    //        }
+    //    }
+    //}
 }

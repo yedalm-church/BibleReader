@@ -1,13 +1,22 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UIBibleReadView : UIBase
+public partial class UIBibleReadView : UIBase
 {
-    [UIInject("Bible_ListView")] private BibleReadList Bible_ListView;
-    [UIInject("Button_Chapter")] private UIButton Button_Chapter;
+    [UIInject("Bible_ListView")] private BibleReadList BibleReadList;
+    [UIInject("Chapter_ListView")] private UIChapterList Chapter_ListView;
     [UIInject("Text_Read_Type")] private TMP_Text Text_Read_Type;
     [UIInject("Button_Read_Type")] private UIButton Button_Read_Type;
-    [UIInject("Button_Read_Start")] private UIButton Button_Read_Start;
+    [UIInject("Bible_ListView")] private ScrollRect BibleScrollRect;
+
+    private int _lastVerse;
+
+    protected override void Start()
+    {
+        base.Start();
+        BindEvent();
+    }
 
     public override void UpdateContent()
     {
@@ -24,8 +33,13 @@ public class UIBibleReadView : UIBase
 
         Text_Read_Type.text = BibleManager.Instance.GetReadTypeText(BibleManager.Instance.ReadingData.ReadType);
 
-        Bible_ListView.CreateList();
-        BindEvent();
+        _lastVerse = TableDataManager.BibleDataLoader.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
+
+        Chapter_ListView.gameObject.SetActive(false);
+
+        SetTopUI();
+
+        BibleReadList.CreateList();
     }
 
     public override void OnClose()
@@ -36,33 +50,85 @@ public class UIBibleReadView : UIBase
 
     public override void BindEvent()
     {
+        UIBindEvent.BindEvent(Button_Chapter, OnClickChapter);
+        UIBindEvent.BindEvent(Button_Prev, OnClickPrev);
+        UIBindEvent.BindEvent(Button_Next, OnClickNext);
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
         UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
+        UIBindEvent.BindEvent(Button_Read_Pause, OnClickReadPause);
+        UIBindEvent.BindEvent(Button_Read_Stop, OnClickReadStop);
+
+        if (BibleManager.Instance?.BibleReader != null)
+        {
+            BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+            BibleManager.Instance.BibleReader.OnReadCurrentVerse += OnReadCurrentVerse;
+        }
     }
 
     public override void UnBindEvent()
     {
-        UIBindEvent.BindEvent(Button_Chapter, OnClickChapter);
+        UIBindEvent.UnBindEvent(Button_Chapter, OnClickChapter);
+        UIBindEvent.BindEvent(Button_Prev, OnClickPrev);
+        UIBindEvent.BindEvent(Button_Next, OnClickNext);
         UIBindEvent.UnBindEvent(Button_Read_Type, OnClickReadType);
-        UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
-    }
+        UIBindEvent.UnBindEvent(Button_Read_Start, OnClickReadStart);
+        UIBindEvent.UnBindEvent(Button_Read_Pause, OnClickReadPause);
+        UIBindEvent.UnBindEvent(Button_Read_Stop, OnClickReadStop);
 
-    private void OnClickChapter()
-    {
-
+        if (BibleManager.Instance?.BibleReader != null)
+        {
+            BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+        }
     }
 
     private void OnClickReadType()
     {
-
     }
 
-    private void OnClickReadStart()
+    private void OnClickReadBeginning()
     {
+        BibleManager.Instance.ResetUpdateReadingData();
         BibleManager.Instance.StartReading
-            (BibleManager.Instance.ReadingData.Book,
-             BibleManager.Instance.ReadingData.Chapter,
-             BibleManager.Instance.ReadingData.Verse);
+                (BibleManager.Instance.ReadingData.Book,
+                 BibleManager.Instance.ReadingData.Chapter,
+                 BibleManager.Instance.ReadingData.Verse);
+    }
+
+    private void OnReadCurrentVerse(int InVerse)
+    {
+        var item = BibleReadList.VerseListItem[InVerse - 1];
+
+        ScrollToCenter(item.transform as RectTransform);
+    }
+
+    private void ScrollToCenter(RectTransform item)
+    {
+        Canvas.ForceUpdateCanvases();
+
+        var content = BibleScrollRect.content;
+        var viewport = BibleScrollRect.viewport;
+
+        var contentHeight = content.rect.height;
+        var viewportHeight = viewport.rect.height;
+
+        if (contentHeight <= viewportHeight)
+            return;
+
+        // Content 위에서부터 현재 아이템의 중심까지 거리
+        var itemCenterY =
+            -item.anchoredPosition.y +
+            (item.rect.height * (1f - item.pivot.y));
+
+        // 현재 아이템이 화면 중앙에 오도록 스크롤할 거리
+        var scrollY = itemCenterY - (viewportHeight * 0.5f);
+
+        // 스크롤 가능한 전체 거리
+        var scrollableHeight = contentHeight - viewportHeight;
+
+        var normalized =
+            1f - Mathf.Clamp01(scrollY / scrollableHeight);
+
+        BibleScrollRect.verticalNormalizedPosition = normalized;
     }
 }

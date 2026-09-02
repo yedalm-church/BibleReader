@@ -8,6 +8,7 @@ public class UIList : MonoBehaviour
     [SerializeField] private Transform _content;
 
     private readonly List<GameObject> _items = new();
+    public int GetItemCount => _items.Count;
 
     public GameObject AddItem()
     {
@@ -21,6 +22,15 @@ public class UIList : MonoBehaviour
     {
         GameObject item = AddItem();
         return item.GetComponent<T>();
+    }
+
+    public T AddOrReUseItem<T>(int InIndex) where T : Component
+    {
+        var returnValue = GetItem<T>(InIndex);
+        if (returnValue != null)
+            return returnValue;
+
+        return AddItem<T>();
     }
 
     public T GetItem<T>(int InIndex) where T : Component
@@ -41,6 +51,7 @@ public class UIList : MonoBehaviour
 
         _items[InIndex].SetActive(InActive);
     }
+
 
     public void Clear()
     {

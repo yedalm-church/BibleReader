@@ -28,6 +28,7 @@ public class UIButton : Button
 
     public void Bind(Action InAction)
     {
+        _onClick -= InAction;
         _onClick += InAction;
     }
 

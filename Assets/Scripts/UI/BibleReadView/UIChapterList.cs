@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class UIChapterList : UIBase
+{
+    [UIInject("Contents")] private UIList UIList;
+
+    public readonly List<ChapterListItem> items = new();
+
+    public Action<int> OnClickChapterItem;
+
+    public void CreateList()
+    {
+        OnClear();
+
+        var count = TableDataManager.BibleDataLoader.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
+
+        for (int i = 0; i < count; ++i)
+        {
+            var item = UIList.AddItem<ChapterListItem>();
+            item.SetData(i + 1, OnClickItem);
+            items.Add(item);
+        }
+
+        BindEvent();
+    }
+
+    public void OnClear()
+    {
+        items.Clear();
+    }
+
+    public void OnClickItem(int InChapter)
+    {
+        OnClickChapterItem?.Invoke(InChapter);
+    }
+}
