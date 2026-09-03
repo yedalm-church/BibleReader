@@ -31,11 +31,17 @@ public partial class BibleManager : MonoBehaviour
 
         Debug.Log("BibleManager 초기화 완료");
 
+        ReadingData = new();
+        CurrentReadingPosition = new();
+
         _whisperManager = new();
         _microphoneRecord = new();
 
         _bibleSTT = new(_whisperManager, _microphoneRecord);
         _bibleSTT.Initialize();
+
+        _bibleTTS = new();
+        _bibleTTS.Initialize();
 
         _alternateReader = new(_bibleTTS, _bibleSTT);
         _bibleReader = new(_bibleTTS);
