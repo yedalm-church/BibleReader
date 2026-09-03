@@ -11,7 +11,7 @@ public class BibleReadList : UIBase
     {
         OnClear();
 
-        var datas = TableDataManager.BibleDataLoader.GetChapter(BibleManager.Instance.ReadingData.Book,
+        var datas = TableDataManager.BibleData.GetChapter(BibleManager.Instance.ReadingData.Book,
             BibleManager.Instance.ReadingData.Chapter);
 
         for (int i = 0, count = datas.Count; i < count; ++i)

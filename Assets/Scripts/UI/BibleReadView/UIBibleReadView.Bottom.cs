@@ -19,10 +19,10 @@ public partial class UIBibleReadView
         else
         {
             _dirtyPauseReading = false;
-            BibleManager.Instance.StartReading(
-                BibleManager.UpdateReadingData.Book,
-                BibleManager.UpdateReadingData.Chapter,
-                BibleManager.UpdateReadingData.Verse);
+
+            var (book, chapter, verse) = BibleManager.Instance.CurrentReadingPosition.Value;
+
+            BibleManager.Instance.StartReading(book, chapter, verse);
         }
     }
 
@@ -34,7 +34,7 @@ public partial class UIBibleReadView
 
     private void OnClickReadStop()
     {
-        BibleManager.Instance.ResetReadingVerseData();
+        BibleManager.Instance.ReadingData.ResetVerse();
         BibleManager.Instance.ResetUpdateReadingData();
         BibleManager.Instance.StopReading();
     }

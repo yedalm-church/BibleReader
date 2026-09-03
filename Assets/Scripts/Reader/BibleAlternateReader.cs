@@ -1,11 +1,11 @@
-using System;
+ï»¿using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class BibleAlternateReader
 {
-    private readonly BibleDataLoader _bibleLoader;
-    private readonly BibleTTS _bibleTTS;
-    private readonly BibleSTT _bibleSTT;
+    private readonly BibleTTS TTS;
+    private readonly BibleSTT STT;
 
     private int _currentBook;
     private int _currentChapter;
@@ -20,17 +20,16 @@ public class BibleAlternateReader
     public event Action OnChapterFinished;
     public event Action OnSpeakCompleted;
 
-    public BibleAlternateReader(BibleDataLoader InBibleLoader, BibleTTS InBibleTTS, BibleSTT InBibleSTT)
+    public BibleAlternateReader(BibleTTS InBibleTTS, BibleSTT InBibleSTT)
     {
-        _bibleLoader = InBibleLoader;
-        _bibleTTS = InBibleTTS;
-        _bibleSTT = InBibleSTT;
+        TTS = InBibleTTS;
+        STT = InBibleSTT;
 
-        // AI°¡ ÀĞ±â¸¦ ³¡³»¸é ÀÚµ¿ È£Ãâ
-        _bibleTTS.OnSpeakCompleted += AIReadingComplete;
+        // AIê°€ ì½ê¸°ë¥¼ ëë‚´ë©´ ìë™ í˜¸ì¶œ
+        TTS.OnSpeakCompleted += AIReadingComplete;
 
-        // »ç¿ëÀÚ°¡ ÇØ´ç ±¸ÀıÀ» ÀĞ¾ú´Ù°í ÀÎ½ÄµÇ¸é ÀÚµ¿ È£Ãâ
-        _bibleSTT.OnMatched += UserReadingComplete;
+        // ì‚¬ìš©ìê°€ í•´ë‹¹ êµ¬ì ˆì„ ì½ì—ˆë‹¤ê³  ì¸ì‹ë˜ë©´ ìë™ í˜¸ì¶œ
+        STT.OnMatched += UserReadingComplete;
     }
 
     public void StartReading(int InBook, int InChapter, int InVerse)
@@ -39,40 +38,40 @@ public class BibleAlternateReader
         _currentChapter = InChapter;
         _currentVerse = InVerse;
 
-        // Ã³À½Àº AI Â÷·Ê
+        // ì²˜ìŒì€ AI ì°¨ë¡€
         _isUserTurn = false;
 
         ReadCurrentVerse();
     }
 
     /// <summary>
-    /// »ç¿ëÀÚ°¡ ÀÚ½ÅÀÇ ÀıÀ» ´Ù ÀĞ¾úÀ» ¶§ È£Ãâ
+    /// ì‚¬ìš©ìê°€ ìì‹ ì˜ ì ˆì„ ë‹¤ ì½ì—ˆì„ ë•Œ í˜¸ì¶œ
     /// </summary>
     public void UserReadingComplete()
     {
         if (!_isUserTurn)
         {
-            Debug.LogWarning("ÇöÀç´Â »ç¿ëÀÚ Â÷·Ê°¡ ¾Æ´Õ´Ï´Ù.");
+            Debug.LogWarning("í˜„ì¬ëŠ” ì‚¬ìš©ì ì°¨ë¡€ê°€ ì•„ë‹™ë‹ˆë‹¤.");
             return;
         }
 
-        // ´ÙÀ½ ÀıÀº AI Â÷·Ê
+        // ë‹¤ìŒ ì ˆì€ AI ì°¨ë¡€
         _currentVerse++;
         _isUserTurn = false;
 
-        // ¹Ù·Î AI°¡ ´ÙÀ½ Àı ÀĞÀ½
+        // ë°”ë¡œ AIê°€ ë‹¤ìŒ ì ˆ ì½ìŒ
         ReadCurrentVerse();
     }
 
     /// <summary>
-    /// AI°¡ ÀÚ½ÅÀÇ ÀıÀ» ´Ù ÀĞ¾úÀ» ¶§ È£Ãâ
+    /// AIê°€ ìì‹ ì˜ ì ˆì„ ë‹¤ ì½ì—ˆì„ ë•Œ í˜¸ì¶œ
     /// </summary>
     public void AIReadingComplete()
     {
         if (_isUserTurn)
             return;
 
-        // ´ÙÀ½ ÀıÀº »ç¿ëÀÚ Â÷·Ê
+        // ë‹¤ìŒ ì ˆì€ ì‚¬ìš©ì ì°¨ë¡€
         _currentVerse++;
         _isUserTurn = true;
 
@@ -81,7 +80,7 @@ public class BibleAlternateReader
 
     private void ReadCurrentVerse()
     { 
-        var verse = _bibleLoader.GetVerse(_currentBook, _currentChapter, _currentVerse);
+        var verse = TableDataManager.BibleData.GetVerse(_currentBook, _currentChapter, _currentVerse);
 
         if (verse == null)
         {
@@ -91,19 +90,19 @@ public class BibleAlternateReader
 
         if (_isUserTurn)
         {
-            // »ç¿ëÀÚ Â÷·Ê
-            Debug.Log($"»ç¿ëÀÚ {_currentVerse}Àı - {verse.text}");
+            // ì‚¬ìš©ì ì°¨ë¡€
+            Debug.Log($"ì‚¬ìš©ì {_currentVerse}ì ˆ - {verse.text}");
 
-            _bibleSTT.StartListening(verse.text);
+            STT.StartListening(verse.text);
         }
         else
         {
-            // AI Â÷·Ê
-            Debug.Log($"AI {_currentVerse}Àı - {verse.text}");
+            // AI ì°¨ë¡€
+            Debug.Log($"AI {_currentVerse}ì ˆ - {verse.text}");
 
-            _bibleSTT.StopListening();
+            STT.StopListening();
 
-            _bibleTTS.Speak(verse.text);
+            TTS.Speak(verse.text);
         }
     }
 }

@@ -31,7 +31,7 @@ public class UITitleBarComponent : UIBase
     public override void OnClose()
     {
         base.OnClose();
-        BibleManager.Instance.TTS.Stop();
+        BibleManager.Instance.StopReading();
         SceneLoadManager.LoadScene("ReadingBible");
     }
 }

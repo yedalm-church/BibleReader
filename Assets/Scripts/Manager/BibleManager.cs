@@ -27,23 +27,18 @@ public partial class BibleManager : MonoBehaviour
     private void Initialize()
     {
         TableDataManager.Initialize();
+        UIManager.Initialize();
 
         Debug.Log("BibleManager 초기화 완료");
 
         _whisperManager = new();
         _microphoneRecord = new();
 
-        _bibleTTS = new();
-        _bibleTTS.Initialize();
-
         _bibleSTT = new(_whisperManager, _microphoneRecord);
         _bibleSTT.Initialize();
 
-        _alternateReader = new(TableDataManager.BibleDataLoader,
-                               _bibleTTS,
-                               _bibleSTT);
-
-        _bibleReader = new();
+        _alternateReader = new(_bibleTTS, _bibleSTT);
+        _bibleReader = new(_bibleTTS);
 
         BibleReadingSetting.Load();
     }

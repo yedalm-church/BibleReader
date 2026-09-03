@@ -27,13 +27,13 @@ public partial class UIBibleReadView : UIBase
         {
             var bibleObject = new GameObject("BibleManager");
             bibleObject.AddComponent<BibleManager>();
-            BibleManager.Instance.SetReadingData(BibleType.Old, 1, 1, 1);
-            BibleManager.Instance.SetReadingType(ReadType.AI_Reading);
+            BibleManager.Instance.ReadingData.Set(BibleType.Old, 1, 1, 1);
+            BibleManager.Instance.ReadingData.SetReadType(ReadType.AI_Reading);
         }
 
         Text_Read_Type.text = BibleManager.Instance.GetReadTypeText(BibleManager.Instance.ReadingData.ReadType);
 
-        _lastVerse = TableDataManager.BibleDataLoader.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
+        _lastVerse = TableDataManager.BibleData.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
 
         Chapter_ListView.gameObject.SetActive(false);
 
@@ -101,7 +101,7 @@ public partial class UIBibleReadView : UIBase
 
     private void OnReadCurrentVerse(int InVerse)
     {
-        BibleManager.Instance.UpdateVerseReadingData(InVerse);
+        BibleManager.Instance.CurrentReadingPosition.SetVerse(InVerse);
 
         var item = BibleReadList.VerseListItem[InVerse - 1];
         ScrollToCenter(item.transform as RectTransform);

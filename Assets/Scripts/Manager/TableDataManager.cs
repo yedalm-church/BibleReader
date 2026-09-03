@@ -2,13 +2,13 @@ using UnityEngine;
 
 public static class TableDataManager
 {
-    public static BibleDataLoader BibleDataLoader;
+    public static BibleData BibleData;
 
     public static void Initialize()
     {
-        BibleDataLoader = new BibleDataLoader();
+        BibleData = new BibleData();
 
-        if (!BibleDataLoader.Load())
+        if (!BibleData.Load())
         {
             Debug.LogError("성경 데이터 로드 실패");
             return;

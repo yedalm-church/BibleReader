@@ -9,7 +9,14 @@ public class BibleReader
 
     private int _lastVerse;
 
+    private readonly BibleTTS TTS;
+
     public Action<int> OnReadCurrentVerse;
+
+    public BibleReader(BibleTTS InBibleTTS)
+    {
+        TTS = InBibleTTS;
+    }
 
     public void StartReading(int InBook, int InChapter, int InVerse = 1)
     {
@@ -17,10 +24,10 @@ public class BibleReader
         _chapter = InChapter;
         _verse = InVerse;
 
-        _lastVerse = TableDataManager.BibleDataLoader.GetVerseCount(_book, _chapter);
+        _lastVerse = TableDataManager.BibleData.GetVerseCount(_book, _chapter);
 
-        BibleManager.Instance.TTS.OnSpeakCompleted -= OnSpeakCompleted;
-        BibleManager.Instance.TTS.OnSpeakCompleted += OnSpeakCompleted;
+        TTS.OnSpeakCompleted -= OnSpeakCompleted;
+        TTS.OnSpeakCompleted += OnSpeakCompleted;
 
         ReadCurrentVerse();
     }
@@ -29,12 +36,12 @@ public class BibleReader
     {
         await Awaitable.MainThreadAsync();
 
-        var text = TableDataManager.BibleDataLoader.GetVerse(_book,
+        var text = TableDataManager.BibleData.GetVerse(_book,
             _chapter,
             _verse)?.text;
 
         OnReadCurrentVerse?.Invoke(_verse);
-        BibleManager.Instance.TTS.Speak(text);
+        TTS.Speak(text);
     }
 
     public void OnSpeakCompleted()
@@ -62,5 +69,10 @@ public class BibleReader
         _lastVerse = 0;
 
         Debug.Log($"OnChapterCompleted {_chapter} {_verse}");
+    }
+
+    public void StopReading()
+    {
+        TTS.Stop();
     }
 }

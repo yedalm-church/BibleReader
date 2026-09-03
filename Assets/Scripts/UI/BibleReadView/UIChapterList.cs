@@ -14,7 +14,7 @@ public class UIChapterList : UIBase
     {
         OnClear();
 
-        var count = TableDataManager.BibleDataLoader.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
+        var count = TableDataManager.BibleData.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
 
         for (int i = 0; i < count; ++i)
         {

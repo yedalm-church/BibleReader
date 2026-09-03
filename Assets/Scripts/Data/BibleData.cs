@@ -15,7 +15,7 @@ public class BibleVerse
     public string source;
 }
 
-public class BibleDataLoader
+public class BibleData
 {
     private List<BibleVerse> verses = new List<BibleVerse>();
 

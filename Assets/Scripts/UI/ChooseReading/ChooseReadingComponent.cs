@@ -15,10 +15,10 @@ public class ChooseReadingComponent : UIBase
     {
         base.UpdateContent();
 
-        Image_Old_Title.gameObject.SetActive(BibleManager.Instance.ReadingData.Type == BibleType.Old);
-        Image_New_Title.gameObject.SetActive(BibleManager.Instance.ReadingData.Type == BibleType.New);
+        Image_Old_Title.gameObject.SetActive(BibleManager.Instance.ReadingData.BibleType == BibleType.Old);
+        Image_New_Title.gameObject.SetActive(BibleManager.Instance.ReadingData.BibleType == BibleType.New);
 
-        if (BibleManager.Instance.ReadingData.Type == BibleType.Old)
+        if (BibleManager.Instance.ReadingData.BibleType == BibleType.Old)
             UIBibleOldInfo.UpdateContent();
         else 
             UIBibleNewInfo.UpdateContent();

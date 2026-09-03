@@ -21,7 +21,7 @@ public partial class UIBibleReadView
 
     private void SetPrev_NextButton()
     {
-        var chapterCount = TableDataManager.BibleDataLoader.GetChapterCount(BibleManager.Instance.ReadingData.Book);
+        var chapterCount = TableDataManager.BibleData.GetChapterCount(BibleManager.Instance.ReadingData.Book);
         var currChapter = BibleManager.Instance.ReadingData.Chapter;
         var prevChapter = currChapter - 1;
         var nextChapter = currChapter + 1;

@@ -9,20 +9,11 @@ public enum ReadType
     Record,
 }
 
-public class BibleReadingData
-{
-    public ReadType ReadType;
-    public BibleType Type;
-    public int Book;
-    public int Chapter;
-    public int Verse;
-}
-
 public partial class BibleManager
 {
     public BibleReadingData ReadingData { get; private set; }
 
-    public static (int Book, int Chapter, int Verse) UpdateReadingData = (1, 1, 1);
+    public CurrentReadingPosition CurrentReadingPosition { get; private set; }
 
     public readonly List<(ReadType Type, string Text)> ReadTypeText = new()
     {
@@ -31,41 +22,15 @@ public partial class BibleManager
         (ReadType.Record, "³» ³¶µ¶ ³ìÀ½"),
     };
 
-    public void SetReadingData(BibleType InType, int InBook, int InChapter, int InVerse)
-    {
-        ReadingData = new BibleReadingData
-        {
-            Type = InType,
-            Book = InBook,
-            Chapter = InChapter,
-            Verse = InVerse,
-        };
-    }
-
-    public void SetReadingType(ReadType InType)
-    {
-        ReadingData.ReadType = InType;
-    }
-
     public string GetReadTypeText(ReadType InType)
     {
         return ReadTypeText.First(x => x.Type == InType).Text;
     }
 
-    public void UpdateVerseReadingData(int InVerse)
-    {
-        UpdateReadingData.Verse = InVerse;
-    }
-
-    public void ResetReadingVerseData()
-    {
-        ReadingData.Verse = 1;
-    }
-
     public void ResetUpdateReadingData()
     {
-        UpdateReadingData.Book = ReadingData.Book;
-        UpdateReadingData.Chapter = ReadingData.Chapter;
-        UpdateReadingData.Verse = ReadingData.Verse;
+        CurrentReadingPosition.Book = ReadingData.Book;
+        CurrentReadingPosition.Chapter = ReadingData.Chapter;
+        CurrentReadingPosition.Verse = ReadingData.Verse;
     }
 }

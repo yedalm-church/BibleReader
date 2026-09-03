@@ -16,4 +16,9 @@ public partial class BibleManager
     {
         _bibleReader.ReadCurrentVerse();
     }
+
+    public void StopReading()
+    {
+        _bibleReader.StopReading();
+    }
 }
