@@ -15,8 +15,8 @@ public class MainComponent : UIBase
 
     public override void OnClose()
     {
-        base.OnClose();
         OnUnBindEvent();
+        base.OnClose();
     }
 
     void OnBindEvent()

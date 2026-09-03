@@ -8,49 +8,53 @@ public static class UIInjector
     {
         var targetType = InTarget.GetType();
 
-        FieldInfo[] fields =
-            targetType.GetFields(
-                BindingFlags.Instance |
-                BindingFlags.NonPublic |
-                BindingFlags.Public);
-
-        foreach (var field in fields)
+        while (targetType != null && targetType != typeof(MonoBehaviour))
         {
-            var attribute = field.GetCustomAttribute<UIInjectAttribute>();
+            var fields = targetType.GetFields(BindingFlags.Instance |
+                BindingFlags.NonPublic |
+                BindingFlags.Public |
+                BindingFlags.DeclaredOnly);
 
-            if (attribute == null)
-                continue;
-
-            var child = FindChildRecursive(InTarget.transform, attribute.ObjectName);
-
-            if (child == null)
+            foreach (var field in fields)
             {
-                Debug.LogError($"UIInject 실패 : {attribute.ObjectName}");
-                continue;
+                var attribute = field.GetCustomAttribute<UIInjectAttribute>();
+
+                if (attribute == null)
+                    continue;
+
+                var child = FindChildRecursive(InTarget.transform, attribute.ObjectName);
+
+                if (child == null)
+                {
+                    Debug.LogError($"UIInject 실패 : {attribute.ObjectName}");
+                    continue;
+                }
+
+                object value = null;
+
+                if (field.FieldType == typeof(GameObject))
+                {
+                    value = child.gameObject;
+                }
+                else if (field.FieldType == typeof(Transform))
+                {
+                    value = child;
+                }
+                else if (typeof(Component).IsAssignableFrom(field.FieldType))
+                {
+                    value = child.GetComponent(field.FieldType);
+                }
+
+                if (value == null)
+                {
+                    Debug.LogError($"UIInject 실패 : {attribute.ObjectName}에서 {field.FieldType.Name}을 찾을 수 없음");
+                    continue;
+                }
+
+                field.SetValue(InTarget, value);
             }
 
-            object value = null;
-
-            if (field.FieldType == typeof(GameObject))
-            {
-                value = child.gameObject;
-            }
-            else if (field.FieldType == typeof(Transform))
-            {
-                value = child;
-            }
-            else if (typeof(Component).IsAssignableFrom(field.FieldType))
-            {
-                value = child.GetComponent(field.FieldType);
-            }
-
-            if (value == null)
-            {
-                Debug.LogError($"UIInject 실패 : {attribute.ObjectName}에서 {field.FieldType.Name}을 찾을 수 없음");
-                continue;
-            }
-
-            field.SetValue(InTarget, value);
+            targetType = targetType.BaseType;
         }
     }
 

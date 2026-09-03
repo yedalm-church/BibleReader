@@ -83,7 +83,7 @@ public partial class UIBibleReadView
 
     private void OnClickOption()
     {
-
+        UIManager.OpenPopup("Option_Popup");
     }
 
     private void OnClickChapterItem(int InChapter)

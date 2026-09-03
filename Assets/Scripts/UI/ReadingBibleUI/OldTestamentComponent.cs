@@ -17,8 +17,8 @@ public class OldTestamentComponent : UIBase
 
     public override void OnClose()
     {
-        base.OnClose();
         UnBindEvent();
+        base.OnClose();
     }
 
     public override void BindEvent()

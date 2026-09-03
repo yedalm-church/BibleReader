@@ -33,7 +33,10 @@ public class UIBase : MonoBehaviour
 
     public virtual void UpdateContent() { }
 
-    public virtual void OnClose() { }
+    public virtual void OnClose() 
+    {
+        UIManager.Close();
+    }
 
     public virtual void OnActive() { }
     public virtual void OnHide() { }

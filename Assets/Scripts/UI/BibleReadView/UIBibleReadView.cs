@@ -44,8 +44,8 @@ public partial class UIBibleReadView : UIBase
 
     public override void OnClose()
     {
-        base.OnClose();
         UnBindEvent();
+        base.OnClose();
     }
 
     public override void BindEvent()
