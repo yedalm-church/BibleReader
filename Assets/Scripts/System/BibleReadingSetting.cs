@@ -40,6 +40,16 @@ public class BibleReadingSetting : ScriptableObject
         set => _fontSize = value;
     }
 
+    [Header("VerseInterval")]
+    [SerializeField]
+    private float _verseInterval = 1.0f;
+
+    public float VerseInterval
+    {
+        get => _verseInterval;
+        set => _verseInterval = value;
+    }
+
     public static void Load()
     {
         if (_instance != null)
