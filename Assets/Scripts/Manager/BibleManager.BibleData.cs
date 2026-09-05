@@ -2,13 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum ReadType
-{
-    AlternateReading,
-    AI_Reading,
-    Record,
-}
-
 public partial class BibleManager
 {
     public BibleReadingData ReadingData { get; private set; }

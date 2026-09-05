@@ -10,6 +10,8 @@ public partial class UIBibleReadView : UIBase
     [UIInject("Button_Read_Type")] private UIButton Button_Read_Type;
     [UIInject("Bible_ListView")] private ScrollRect BibleScrollRect;
 
+    private ReadType ReadType => BibleManager.Instance.ReadingData.ReadType;
+
     private int _lastVerse;
 
     protected override void Start()
@@ -31,7 +33,7 @@ public partial class UIBibleReadView : UIBase
             BibleManager.Instance.ReadingData.SetReadType(ReadType.AI_Reading);
         }
 
-        Text_Read_Type.text = BibleManager.Instance.GetReadTypeText(BibleManager.Instance.ReadingData.ReadType);
+        SwitchActive_Read_Type.Active((int)ReadType);
 
         _lastVerse = TableDataManager.BibleData.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
 
@@ -40,6 +42,8 @@ public partial class UIBibleReadView : UIBase
         SetTopUI();
 
         BibleReadList.CreateList();
+
+        SwitchActive_ReadSelectButtons.HideAll();
     }
 
     public override void OnClose()
@@ -84,10 +88,6 @@ public partial class UIBibleReadView : UIBase
         {
             BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
         }
-    }
-
-    private void OnClickReadType()
-    {
     }
 
     private void OnClickReadBeginning()

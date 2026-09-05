@@ -29,10 +29,17 @@ public class UIChapterList : UIBase
     public void OnClear()
     {
         items.Clear();
+        UIList.Clear();
     }
 
-    public void OnClickItem(int InChapter)
+    public void OnClickItem(int InPrevChatper, int InChapter)
     {
         OnClickChapterItem?.Invoke(InChapter);
+
+        var item = items.Find(x => x.Chapter == InPrevChatper);
+        if (item != null)
+        {
+            item.ResetUI();
+        }        
     }
 }

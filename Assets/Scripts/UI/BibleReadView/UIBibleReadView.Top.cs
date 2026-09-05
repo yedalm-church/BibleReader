@@ -13,6 +13,8 @@ public partial class UIBibleReadView
     [UIInject("Button_Back")] private UIButton Button_Back;
     [UIInject("Button_Option")] private UIButton Button_Option;
 
+    [UIInject("SwitchActive_Read_Type")] private UISwitchActive SwitchActive_Read_Type;
+
     private void SetTopUI()
     {
         Text_Chapter.text = $"{BibleManager.Instance.ReadingData.Chapter}¿Â";
@@ -58,6 +60,11 @@ public partial class UIBibleReadView
             Chapter_ListView.OnClickChapterItem -= OnClickChapterItem;
             Chapter_ListView.OnClickChapterItem += OnClickChapterItem;
         }
+        else
+        {
+            Chapter_ListView.OnClear();
+            Chapter_ListView.OnClickChapterItem -= OnClickChapterItem;
+        }
     }
 
     private void OnClickPrev()
@@ -86,8 +93,26 @@ public partial class UIBibleReadView
         UIManager.OpenPopup("Option_Popup");
     }
 
+    private void OnClickReadType()
+    {
+        var nextType = (int)BibleManager.Instance.ReadingData.ReadType + 1;
+
+        if (BibleManager.Instance.ReadingData.IsValidReadType((ReadType)nextType) == true)
+        {
+            BibleManager.Instance.ReadingData.SetReadType((ReadType)nextType);
+        }
+        else
+        {
+            BibleManager.Instance.ReadingData.SetReadType(ReadType.AlternateReading);
+        }
+
+        SwitchActive_Read_Type.Active((int)ReadType);
+    }
+
     private void OnClickChapterItem(int InChapter)
     {
         UpdateContent();
+
+        UIManager.CloseLoading();
     }
 }

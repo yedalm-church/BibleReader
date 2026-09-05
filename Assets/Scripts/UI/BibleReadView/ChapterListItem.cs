@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,9 @@ public class ChapterListItem : UIBase
 
     private int _chapter;
 
-    private Action<int> OnClick;
+    private Action<int, int> OnClick;
+
+    public int Chapter => _chapter;
 
     protected override void Start()
     {
@@ -24,23 +27,19 @@ public class ChapterListItem : UIBase
         UnBindEvent();
     }
 
-    public void SetData(int InChapter, Action<int> InClickItem)
+    public void SetData(int InChapter, Action<int, int> InClickItem)
     {
         _chapter = InChapter;
         OnClick = InClickItem;
 
         Text_Chapter_Number.text = $"{InChapter}¿Â";
 
-        if (InChapter == BibleManager.Instance.ReadingData.Chapter)
-        {
-            Image_Current_Bg.gameObject.SetActive(true);
-            Image_Current_Check.gameObject.SetActive(true);
-        }
-        else
-        {
-            Image_Current_Bg.gameObject.SetActive(false);
-            Image_Current_Check.gameObject.SetActive(false);
-        }
+        SetActiveCurrentBg(_chapter == BibleManager.Instance.ReadingData.Chapter);
+    }
+
+    public void ResetUI()
+    {
+        SetActiveCurrentBg(false);
     }
 
     public override void BindEvent()
@@ -57,9 +56,22 @@ public class ChapterListItem : UIBase
 
     private void OnClickChapter()
     {
+        UIManager.OpenLoading();
+
+        var prevChapter = BibleManager.Instance.ReadingData.Chapter;
+
         BibleManager.Instance.ReadingData.Verse = 1;
         BibleManager.Instance.ReadingData.Chapter = _chapter;
         BibleManager.Instance.ResetUpdateReadingData();
-        OnClick?.Invoke(_chapter);
+
+        SetActiveCurrentBg(true);
+
+        OnClick?.Invoke(prevChapter, _chapter);
+    }
+
+    private void SetActiveCurrentBg(bool InActive)
+    {
+        Image_Current_Bg.gameObject.SetActive(InActive);
+        Image_Current_Check.gameObject.SetActive(InActive);
     }
 }

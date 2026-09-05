@@ -6,6 +6,8 @@ public partial class UIBibleReadView
     [UIInject("Button_Read_Pause")] private UIButton Button_Read_Pause;
     [UIInject("Button_Read_Stop")] private UIButton Button_Read_Stop;
 
+    [UIInject("SwitchActive_ReadSelectButtons")] private UISwitchActive SwitchActive_ReadSelectButtons;
+
     private bool _dirtyPauseReading = false;
 
     private void OnClickReadStart()
@@ -24,12 +26,15 @@ public partial class UIBibleReadView
 
             BibleManager.Instance.StartReading(book, chapter, verse);
         }
+
+        SwitchActive_ReadSelectButtons.Active(0);
     }
 
     private void OnClickReadPause()
     {
         _dirtyPauseReading = true;
         BibleManager.Instance.StopReading();
+        SwitchActive_ReadSelectButtons.Active(1);
     }
 
     private void OnClickReadStop()
@@ -37,5 +42,6 @@ public partial class UIBibleReadView
         BibleManager.Instance.ReadingData.ResetVerse();
         BibleManager.Instance.ResetUpdateReadingData();
         BibleManager.Instance.StopReading();
+        SwitchActive_ReadSelectButtons.Active(2);
     }
 }
