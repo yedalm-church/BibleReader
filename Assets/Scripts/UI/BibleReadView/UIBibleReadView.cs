@@ -6,7 +6,6 @@ public partial class UIBibleReadView : UIBase
 {
     [UIInject("Bible_ListView")] private BibleReadList BibleReadList;
     [UIInject("Chapter_ListView")] private UIChapterList Chapter_ListView;
-    [UIInject("Text_Read_Type")] private TMP_Text Text_Read_Type;
     [UIInject("Button_Read_Type")] private UIButton Button_Read_Type;
     [UIInject("Bible_ListView")] private ScrollRect BibleScrollRect;
 
