@@ -26,7 +26,7 @@ public static class UIInjector
 
                 if (child == null)
                 {
-                    Debug.LogError($"UIInject 실패 : {attribute.ObjectName}");
+                    Debug.LogError($"UIInject 실패 : {attribute.ObjectName}, {InTarget.name}");
                     continue;
                 }
 
@@ -64,9 +64,6 @@ public static class UIInjector
 
         foreach (var child in children)
         {
-            if (child == inParent)
-                continue;
-
             if (child.name == inObjectName)
                 return child;
         }

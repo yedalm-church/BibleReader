@@ -83,11 +83,6 @@ public partial class UIBibleReadView
         UpdateContent();
     }
 
-    private void OnClickBack()
-    {
-
-    }
-
     private void OnClickOption()
     {
         UIManager.OpenPopup("Option_Popup");

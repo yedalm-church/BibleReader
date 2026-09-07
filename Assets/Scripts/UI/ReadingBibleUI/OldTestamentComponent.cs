@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class OldTestamentComponent : UIBase
 {
-    [UIInject("Toggle")] private UIToggle OldTestamentToggle;
+    [UIInject("Toggle_Old")] private UIToggle OldTestamentToggle;
     [UIInject("ScrollViewList")] private BibleBookList BibleBookList;
     [UIInject("InputField")] private TMP_InputField InputField;
     [UIInject("Button_Input")] private UIButton Button_Input;
+
+    [UIInject("ScrollViewList")] private Transform ScrollViewList;
 
     public override void UpdateContent()
     {
@@ -36,6 +38,7 @@ public class OldTestamentComponent : UIBase
     private void OnClickOldTestament()
     {
         this.transform.SetAsLastSibling();
+        ScrollViewList.gameObject.SetActive(true);
         BibleBookList.CreateList();
     }
 
@@ -53,5 +56,10 @@ public class OldTestamentComponent : UIBase
             BibleBookList.Search(number);
         else
             BibleBookList.Search(data);
+    }
+
+    public void HideListView()
+    {
+        ScrollViewList.gameObject.SetActive(false);
     }
 }
