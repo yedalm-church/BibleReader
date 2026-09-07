@@ -4,6 +4,8 @@ public partial class BibleManager
 {
     private BibleAlternateReader _alternateReader;
 
+    public BibleAlternateReader AlternateReader => _alternateReader;
+
     public void StartAlternateReading(int InBook,
                                   int InChapter,
                                   int InVerse)

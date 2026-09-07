@@ -14,6 +14,8 @@ public class VerseListItem : UIBase
 
     private int Verse;
 
+    private ReadType ReadType => BibleManager.Instance?.ReadingData.ReadType ?? ReadType.Max;
+
     protected override void Awake()
     {
         base.Awake();
@@ -28,11 +30,24 @@ public class VerseListItem : UIBase
 
         item_Bg.sprite = ImageNormal;
 
-        if (BibleManager.Instance?.BibleReader != null)
+        switch(ReadType)
         {
-            BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
-            BibleManager.Instance.BibleReader.OnReadCurrentVerse += OnReadCurrentVerse;
+            case ReadType.AI_Reading:
+                if (BibleManager.Instance?.BibleReader != null)
+                {
+                    BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+                    BibleManager.Instance.BibleReader.OnReadCurrentVerse += OnReadCurrentVerse;
+                }
+                break;
+            case ReadType.AlternateReading:
+                if (BibleManager.Instance?.BibleReader != null)
+                {
+                    BibleManager.Instance.AlternateReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+                    BibleManager.Instance.AlternateReader.OnReadCurrentVerse += OnReadCurrentVerse;
+                }
+                break;
         }
+
     }
 
     private void OnReadCurrentVerse(int InVerse)

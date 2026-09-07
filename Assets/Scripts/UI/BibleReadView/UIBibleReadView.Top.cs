@@ -107,6 +107,9 @@ public partial class UIBibleReadView
         }
 
         SwitchActive_Read_Type.Active((int)ReadType);
+        SetActiveReadPlay(ReadType is ReadType.AlternateReading or ReadType.AI_Reading);
+
+        UpdateContent();
     }
 
     private void OnClickChapterItem(int InChapter)

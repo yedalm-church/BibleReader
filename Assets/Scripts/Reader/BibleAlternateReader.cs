@@ -15,10 +15,11 @@ public class BibleAlternateReader
     public bool IsUserTurn => _isUserTurn;
     public int CurrentVerse => _currentVerse;
 
-    public event Action<BibleVerse> OnUserTurn;
-    public event Action<BibleVerse> OnAITurn;
-    public event Action OnChapterFinished;
-    public event Action OnSpeakCompleted;
+    public Action<BibleVerse> OnUserTurn;
+    public Action<BibleVerse> OnAITurn;
+    public Action OnChapterFinished;
+    public Action OnSpeakCompleted;
+    public Action<int> OnReadCurrentVerse;
 
     public BibleAlternateReader(BibleTTS InBibleTTS, BibleSTT InBibleSTT)
     {
@@ -78,8 +79,10 @@ public class BibleAlternateReader
         ReadCurrentVerse();
     }
 
-    private void ReadCurrentVerse()
-    { 
+    private async void ReadCurrentVerse()
+    {
+        await Awaitable.MainThreadAsync();
+
         var verse = TableDataManager.BibleData.GetVerse(_currentBook, _currentChapter, _currentVerse);
 
         if (verse == null)
@@ -88,10 +91,13 @@ public class BibleAlternateReader
             return;
         }
 
+
         if (_isUserTurn)
         {
             // 사용자 차례
             Debug.Log($"사용자 {_currentVerse}절 - {verse.text}");
+
+            OnReadCurrentVerse?.Invoke(verse.verse);
 
             STT.StartListening(verse.text);
         }
@@ -100,8 +106,9 @@ public class BibleAlternateReader
             // AI 차례
             Debug.Log($"AI {_currentVerse}절 - {verse.text}");
 
-            STT.StopListening();
+            OnReadCurrentVerse?.Invoke(verse.verse);
 
+            STT.StopListening();
             TTS.Speak(verse.text);
         }
     }

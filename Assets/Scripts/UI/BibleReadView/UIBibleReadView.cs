@@ -33,6 +33,7 @@ public partial class UIBibleReadView : UIBase
         }
 
         SwitchActive_Read_Type.Active((int)ReadType);
+        SetActiveReadPlay(ReadType is ReadType.AlternateReading or ReadType.AI_Reading);
 
         _lastVerse = TableDataManager.BibleData.GetVerseCount(BibleManager.Instance.ReadingData.Book, BibleManager.Instance.ReadingData.Chapter);
 
@@ -42,7 +43,9 @@ public partial class UIBibleReadView : UIBase
 
         BibleReadList.CreateList();
 
+        _dirtyPauseReading = false;
         SwitchActive_ReadSelectButtons.HideAll();
+        SetReadButtonType();
     }
 
     public override void OnClose()
@@ -60,9 +63,14 @@ public partial class UIBibleReadView : UIBase
         UIBindEvent.BindEvent(Button_Back, OnClickBack);
         UIBindEvent.BindEvent(Button_Option, OnClickOption);
         UIBindEvent.BindEvent(Button_Read_Type, OnClickReadType);
+
         UIBindEvent.BindEvent(Button_Read_Start, OnClickReadStart);
         UIBindEvent.BindEvent(Button_Read_Pause, OnClickReadPause);
         UIBindEvent.BindEvent(Button_Read_Stop, OnClickReadStop);
+
+        UIBindEvent.BindEvent(Button_AlternateReading_Start, OnClickAlternateReadingStart);
+        UIBindEvent.BindEvent(Button_AlternateReading_Pause, OnClickAlternateReadingPause);
+        UIBindEvent.BindEvent(Button_AlternateReading_Stop, OnClickAlternateReadingStop);
 
         if (BibleManager.Instance?.BibleReader != null)
         {
@@ -82,6 +90,10 @@ public partial class UIBibleReadView : UIBase
         UIBindEvent.UnBindEvent(Button_Read_Start, OnClickReadStart);
         UIBindEvent.UnBindEvent(Button_Read_Pause, OnClickReadPause);
         UIBindEvent.UnBindEvent(Button_Read_Stop, OnClickReadStop);
+
+        UIBindEvent.UnBindEvent(Button_AlternateReading_Start, OnClickAlternateReadingStart);
+        UIBindEvent.UnBindEvent(Button_AlternateReading_Pause, OnClickAlternateReadingPause);
+        UIBindEvent.UnBindEvent(Button_AlternateReading_Stop, OnClickAlternateReadingStop);
 
         if (BibleManager.Instance?.BibleReader != null)
         {
