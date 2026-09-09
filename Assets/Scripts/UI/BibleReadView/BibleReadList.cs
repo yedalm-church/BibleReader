@@ -33,11 +33,18 @@ public class BibleReadList : UIBase
 
     public void OnClear()
     {
-        VerseListItem.Clear();
-
         for (int i = 0, count = VerseListItem.Count; i < count; ++i)
         {
             VerseListItem[i].OnClear();
         }
+
+        UIList.Clear();
+        VerseListItem.Clear();
+    }
+
+    public override void OnClose()
+    {
+        OnClear();
+        base.OnClose();
     }
 }

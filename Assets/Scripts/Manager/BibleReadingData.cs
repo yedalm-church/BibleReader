@@ -1,6 +1,12 @@
 
 using System.Diagnostics;
 
+public enum BibleType
+{
+    Old,
+    New,
+}
+
 public enum ReadType
 {
     AlternateReading,

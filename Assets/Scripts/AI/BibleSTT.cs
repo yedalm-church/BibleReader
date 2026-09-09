@@ -15,6 +15,10 @@ public class BibleSTT
     private string _targetText;
     private bool _isMatched;
 
+    private float _listenElapsed;
+    private float MaxListenTime;
+    private float _bestSimilarity;
+
     public BibleSTT(WhisperManager InWhisperManager, MicrophoneRecord InMicrophoneRecord)
     {
         _whisperManager = InWhisperManager;
@@ -50,20 +54,33 @@ public class BibleSTT
 
         _stream.OnResultUpdated += OnResultUpdated;
         _stream.OnSegmentUpdated += OnSegmentUpdated;
+        _stream.OnSegmentFinished += OnSegmentFinished;
 
         Debug.Log("BibleSTT 초기화 완료");
     }
 
     public void StartListening(string InTargetText)
     {
+        if (_stream == null)
+        {
+            Debug.LogError("[STT] Stream이 null");
+            return;
+        }
+
         _targetText = Normalize(InTargetText);
         _isMatched = false;
 
-        _microphoneRecord.StartRecord();
+        _listenElapsed = 0f;
+        _bestSimilarity = 0f;
+        MaxListenTime = InTargetText.GetUserReadingTime();
 
         _stream.StartStream();
 
-        Debug.Log($"STT 시작: {_targetText}");
+        _microphoneRecord.StartRecord();
+
+        Debug.Log($"[STT] 목표 구절 : {_targetText}");
+
+        ListenTimeoutAsync();
     }
 
     public void StopListening()
@@ -83,18 +100,26 @@ public class BibleSTT
         ProcessRecognizedText(InText);
     }
 
-    private void OnSegmentUpdated(WhisperResult InSegment)
+    private void OnSegmentUpdated(WhisperResult InWhisperResult)
     {
         if (_isMatched)
             return;
 
-        Debug.Log($"Whisper 결과: {InSegment.Result}");
+        Debug.Log($"Whisper 결과: {InWhisperResult.Result}");
 
-        ProcessRecognizedText(InSegment.Result);
+        ProcessRecognizedText(InWhisperResult.Result);
+    }
+
+    private void OnSegmentFinished(WhisperResult InWhisperResult)
+    {
+
     }
 
     private void ProcessRecognizedText(string InRecognizedText)
     {
+        if (_isMatched)
+            return;
+
         var normalized = Normalize(InRecognizedText);
 
         OnRecognized?.Invoke(InRecognizedText);
@@ -111,6 +136,24 @@ public class BibleSTT
         StopListening();
 
         Debug.Log("사용자 구절 읽기 완료");
+
+        OnMatched?.Invoke();
+    }
+
+    private async void ListenTimeoutAsync()
+    {
+        while (!_isMatched && _listenElapsed < MaxListenTime)
+        {
+            _listenElapsed += Time.deltaTime;
+            await Awaitable.NextFrameAsync();
+        }
+
+        if (_isMatched)
+            return;
+
+        Debug.Log($"STT 제한시간 종료 / 최고 일치율: {_bestSimilarity:P0}");
+
+        StopListening();
 
         OnMatched?.Invoke();
     }

@@ -1,6 +1,6 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class BibleAlternateReader
 {
@@ -100,6 +100,8 @@ public class BibleAlternateReader
             OnReadCurrentVerse?.Invoke(verse.verse);
 
             STT.StartListening(verse.text);
+
+            //StartUserTurn(verse.text);
         }
         else
         {
@@ -111,5 +113,16 @@ public class BibleAlternateReader
             STT.StopListening();
             TTS.Speak(verse.text);
         }
+    }
+
+    private async void StartUserTurn(string InVerseText)
+    {
+        var readingTime = InVerseText.GetUserReadingTime();
+
+        Debug.Log($"사용자 읽기 시간: {readingTime:F1}초");
+
+        await Awaitable.WaitForSecondsAsync(readingTime);
+
+        UserReadingComplete();
     }
 }

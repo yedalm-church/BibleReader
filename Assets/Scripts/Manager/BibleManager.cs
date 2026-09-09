@@ -34,8 +34,8 @@ public partial class BibleManager : MonoBehaviour
         ReadingData = new();
         CurrentReadingPosition = new();
 
-        _whisperManager = new();
-        _microphoneRecord = new();
+        _whisperManager = this.gameObject.GetOrAddComponent<WhisperManager>();
+        _microphoneRecord = this.gameObject.GetOrAddComponent<MicrophoneRecord>();
 
         _bibleSTT = new(_whisperManager, _microphoneRecord);
         _bibleSTT.Initialize();

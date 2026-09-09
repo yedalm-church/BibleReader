@@ -106,4 +106,15 @@ public static class BibleBookSetting
     {
         return System.Array.FindIndex(_newTestament, x => x == InName);
     }
+
+    public static string GetBookName(BibleType InBibleType, int InIndex)
+    {
+        var books = InBibleType == BibleType.Old
+            ? _oldTestament
+            : _newTestament;
+
+        return books.IsValidIndex(InIndex)
+            ? books[InIndex]
+            : string.Empty;
+    }
 }

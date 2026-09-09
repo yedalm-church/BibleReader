@@ -3,6 +3,7 @@ using UnityEngine;
 
 public partial class UIBibleReadView
 {
+    [UIInject("Text_Title")] private TMP_Text Text_Title;
     [UIInject("Button_Chapter")] private UIButton Button_Chapter;
     [UIInject("Button_Prev")] private UIButton Button_Prev;
     [UIInject("Button_Next")] private UIButton Button_Next;
@@ -17,6 +18,7 @@ public partial class UIBibleReadView
 
     private void SetTopUI()
     {
+        Text_Title.text = $"{BibleBookSetting.GetBookName(BibleType, BookIndex - 1)}";
         Text_Chapter.text = $"{BibleManager.Instance.ReadingData.Chapter}¿Â";
         SetPrev_NextButton();
     }

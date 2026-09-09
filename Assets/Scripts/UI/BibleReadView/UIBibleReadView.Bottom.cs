@@ -77,9 +77,7 @@ public partial class UIBibleReadView
 
     private void OnClickAlternateReadingStart()
     {
-        _dirtyPauseAlternateReading = false;
-
-        if (_dirtyPauseReading == false)
+        if (_dirtyPauseAlternateReading == false)
         {
             BibleManager.Instance.StartAlternateReading
                 (BibleManager.Instance.ReadingData.Book,
@@ -88,7 +86,7 @@ public partial class UIBibleReadView
         }
         else
         {
-            _dirtyPauseReading = false;
+            _dirtyPauseAlternateReading = false;
 
             var (book, chapter, verse) = BibleManager.Instance.CurrentReadingPosition.Value;
 
@@ -97,6 +95,7 @@ public partial class UIBibleReadView
 
         SwitchActive_ReadSelectButtons.Active(0);
     }
+
     private void OnClickAlternateReadingPause()
     {
         _dirtyPauseAlternateReading = true;

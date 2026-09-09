@@ -868,6 +868,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1199196758}
   - component: {fileID: 1199196759}
+  - component: {fileID: 1199196761}
+  - component: {fileID: 1199196760}
   m_Layer: 0
   m_Name: BibleManager
   m_TagString: Untagged
@@ -902,6 +904,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6943ab69f162990489391847b1f79743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BibleManager
+--- !u!114 &1199196760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199196757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9370225a2ca94276b870d5f87b0db55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.whisper.unity::Whisper.WhisperManager
+  logLevel: 1
+  modelPath: Whisper/ggml-tiny.bin
+  isModelPathInStreamingAssets: 1
+  initOnAwake: 0
+  useGpu: 0
+  flashAttention: 0
+  language: ko
+  translateToEnglish: 0
+  strategy: 0
+  noContext: 1
+  singleSegment: 0
+  enableTokens: 0
+  initialPrompt: 
+  stepSec: 3
+  keepSec: 0.2
+  lengthSec: 10
+  updatePrompt: 1
+  dropOldBuffer: 0
+  useVad: 1
+  tokensTimestamps: 0
+  audioCtx: 0
+--- !u!114 &1199196761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199196757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bc03a4c19604ea394e364f8fc632928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.whisper.unity::Whisper.Utils.MicrophoneRecord
+  maxLengthSec: 60
+  loop: 0
+  frequency: 16000
+  chunksLengthSec: 0.5
+  echo: 0
+  useVad: 1
+  vadUpdateRateSec: 0.1
+  vadContextSec: 30
+  vadLastSec: 1.25
+  vadThd: 1
+  vadFreqThd: 100
+  vadIndicatorImage: {fileID: 0}
+  vadStop: 0
+  dropVadPart: 1
+  vadStopTime: 3
+  microphoneDropdown: {fileID: 0}
+  microphoneDefaultLabel: Default microphone
 --- !u!1 &1218397053
 GameObject:
   m_ObjectHideFlags: 0
@@ -989,8 +1053,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.2945, y: 133}
-  m_SizeDelta: {x: 1073.7151, y: 1280}
+  m_AnchoredPosition: {x: -2.2944984, y: 105}
+  m_SizeDelta: {x: 1073.7151, y: 1084.7551}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1348213024
 MonoBehaviour:

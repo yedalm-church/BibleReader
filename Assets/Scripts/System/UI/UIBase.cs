@@ -29,6 +29,7 @@ public class UIBase : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
+        OnClose();
     }
 
     public virtual void UpdateContent() { }

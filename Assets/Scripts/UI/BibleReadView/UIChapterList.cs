@@ -42,4 +42,10 @@ public class UIChapterList : UIBase
             item.ResetUI();
         }        
     }
+
+    public override void OnClose()
+    {
+        OnClear();
+        base.OnClose();
+    }
 }

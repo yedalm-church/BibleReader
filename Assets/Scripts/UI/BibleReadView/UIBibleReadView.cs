@@ -10,6 +10,8 @@ public partial class UIBibleReadView : UIBase
     [UIInject("Bible_ListView")] private ScrollRect BibleScrollRect;
 
     private ReadType ReadType => BibleManager.Instance.ReadingData.ReadType;
+    private int BookIndex => BibleManager.Instance.ReadingData.Book;
+    private BibleType BibleType => BibleManager.Instance.ReadingData.BibleType;
 
     private int _lastVerse;
 
@@ -51,6 +53,7 @@ public partial class UIBibleReadView : UIBase
     public override void OnClose()
     {
         UnBindEvent();
+        BibleManager.Instance.StopReading();
         base.OnClose();
     }
 
@@ -76,6 +79,12 @@ public partial class UIBibleReadView : UIBase
             BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
             BibleManager.Instance.BibleReader.OnReadCurrentVerse += OnReadCurrentVerse;
         }
+
+        if (BibleManager.Instance?.AlternateReader != null)
+        {
+            BibleManager.Instance.AlternateReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+            BibleManager.Instance.AlternateReader.OnReadCurrentVerse += OnReadCurrentVerse;
+        }
     }
 
     public override void UnBindEvent()
@@ -96,6 +105,11 @@ public partial class UIBibleReadView : UIBase
         if (BibleManager.Instance?.BibleReader != null)
         {
             BibleManager.Instance.BibleReader.OnReadCurrentVerse -= OnReadCurrentVerse;
+        }
+
+        if (BibleManager.Instance?.AlternateReader != null)
+        {
+            BibleManager.Instance.AlternateReader.OnReadCurrentVerse -= OnReadCurrentVerse;
         }
     }
 

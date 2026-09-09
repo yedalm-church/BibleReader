@@ -1,12 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BibleType
-{
-    Old,
-    New,
-}
-
 public class BibleBookList : UIBase
 {
     [SerializeField] private BibleType type;
